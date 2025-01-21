@@ -410,7 +410,7 @@ public class Modules extends System<Modules> {
         add(new AutoAnvil());
         add(new AutoArmor());
         add(new AutoCity());
-        add(new AutoEXP());
+        add(new AutomaticXP());
         add(new AutoTotem());
         add(new AutoTrap());
         add(new AutoWeapon());
@@ -430,6 +430,7 @@ public class Modules extends System<Modules> {
         add(new SelfTrap());
         add(new SelfWeb());
         add(new Surround());
+        add(new AntiCrystal());
     }
 
     private void initPlayer() {
@@ -591,6 +592,7 @@ public class Modules extends System<Modules> {
         add(new ServerSpoof());
         add(new SoundBlocker());
         add(new Spam());
+        add(new AutomaticXP());
     }
 
     public static class ModuleRegistry extends SimpleRegistry<Module> {

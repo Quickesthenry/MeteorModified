@@ -80,15 +80,6 @@ public class AutoEat extends Module {
         .build()
     );
 
-    private final Setting<Double> healthThreshold = sgThreshold.add(new DoubleSetting.Builder()
-        .name("health-threshold")
-        .description("The level of health you eat at.")
-        .defaultValue(10)
-        .range(1, 19)
-        .sliderRange(1, 19)
-        .visible(() -> thresholdMode.get() != ThresholdMode.Hunger)
-        .build()
-    );
 
     private final Setting<Integer> hungerThreshold = sgThreshold.add(new IntSetting.Builder()
         .name("hunger-threshold")
@@ -229,10 +220,9 @@ public class AutoEat extends Module {
     }
 
     public boolean shouldEat() {
-        boolean health = mc.player.getHealth() <= healthThreshold.get();
         boolean hunger = mc.player.getHungerManager().getFoodLevel() <= hungerThreshold.get();
 
-        return thresholdMode.get().test(health, hunger);
+        return thresholdMode.get().test(true, hunger);
     }
 
     private int findSlot() {
