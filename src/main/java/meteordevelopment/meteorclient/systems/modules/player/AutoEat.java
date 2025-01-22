@@ -73,12 +73,6 @@ public class AutoEat extends Module {
 
     // Threshold
 
-    private final Setting<ThresholdMode> thresholdMode = sgThreshold.add(new EnumSetting.Builder<ThresholdMode>()
-        .name("threshold-mode")
-        .description("The threshold mode to trigger auto eat.")
-        .defaultValue(ThresholdMode.Any)
-        .build()
-    );
 
 
     private final Setting<Integer> hungerThreshold = sgThreshold.add(new IntSetting.Builder()
@@ -87,7 +81,6 @@ public class AutoEat extends Module {
         .defaultValue(16)
         .range(1, 19)
         .sliderRange(1, 19)
-        .visible(() -> thresholdMode.get() != ThresholdMode.Health)
         .build()
     );
 
@@ -222,7 +215,7 @@ public class AutoEat extends Module {
     public boolean shouldEat() {
         boolean hunger = mc.player.getHungerManager().getFoodLevel() <= hungerThreshold.get();
 
-        return thresholdMode.get().test(false, hunger);
+        return hunger;
     }
 
     private int findSlot() {
@@ -254,20 +247,5 @@ public class AutoEat extends Module {
         return slot;
     }
 
-    public enum ThresholdMode {
-        Health((health, hunger) -> health),
-        Hunger((health, hunger) -> hunger),
-        Any((health, hunger) -> health || hunger),
-        Both((health, hunger) -> health && hunger);
 
-        private final BiPredicate<Boolean, Boolean> predicate;
-
-        ThresholdMode(BiPredicate<Boolean, Boolean> predicate) {
-            this.predicate = predicate;
-        }
-
-        public boolean test(boolean health, boolean hunger) {
-            return predicate.test(health, hunger);
-        }
-    }
 }
