@@ -222,7 +222,7 @@ public class AutoEat extends Module {
     public boolean shouldEat() {
         boolean hunger = mc.player.getHungerManager().getFoodLevel() <= hungerThreshold.get();
 
-        return thresholdMode.get().test(true, hunger);
+        return thresholdMode.get().test(false, hunger);
     }
 
     private int findSlot() {
