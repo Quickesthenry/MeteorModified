@@ -2,7 +2,6 @@ package com.MeteorModified.addon.modules;
 
 import com.MeteorModified.addon.AddonTemplate;
 import meteordevelopment.meteorclient.events.entity.player.ItemUseCrosshairTargetEvent;
-import com.MeteorModified.addon.AddonTemplate;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.pathing.PathManagers;
 import meteordevelopment.meteorclient.settings.*;
@@ -19,11 +18,10 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiPredicate;
-
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class BetterAutoEat extends Module {
 
@@ -32,13 +30,16 @@ public class BetterAutoEat extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgThreshold = settings.createGroup("Threshold");
 
-    public final Setting<Set<Item>> blacklist = sgGeneral.add(new ItemListSetting.Builder()
+    // Liste anstelle eines Sets verwenden, um den Typ mit ItemListSetting kompatibel zu machen
+    public final Setting<List<Item>> blacklist = sgGeneral.add(new ItemListSetting.Builder()
         .name("blacklist")
         .description("Which items to not eat.")
         .defaultValue(Items.ENCHANTED_GOLDEN_APPLE, Items.GOLDEN_APPLE, Items.CHORUS_FRUIT, Items.POISONOUS_POTATO, Items.PUFFERFISH, Items.CHICKEN, Items.ROTTEN_FLESH, Items.SPIDER_EYE, Items.SUSPICIOUS_STEW)
         .filter(item -> item.getComponents().get(DataComponentTypes.FOOD) != null)
         .build()
     );
+
+
 
     private final Setting<Boolean> pauseAuras = sgGeneral.add(new BoolSetting.Builder()
         .name("pause-auras")
@@ -84,7 +85,7 @@ public class BetterAutoEat extends Module {
 
     private boolean eating;
     private int slot, prevSlot;
-    private final Set<Class<? extends Module>> wasAura = new HashSet<>();
+    private final List<Class<? extends Module>> wasAura = new ArrayList<>();
     private boolean wasBaritone = false;
 
     public BetterAutoEat() {
@@ -98,8 +99,6 @@ public class BetterAutoEat extends Module {
 
     @EventHandler(priority = EventPriority.LOW)
     private void onTick(TickEvent.Pre event) {
-        // Skip if Auto Gap is already eating
-        if (Modules.get().get(AutoGap.class).isEating()) return;
 
         if (eating) {
             if (shouldEat()) {
