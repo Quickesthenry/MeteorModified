@@ -1,5 +1,6 @@
-package meteordevelopment.meteorclient.systems.modules.misc;
+package com.MeteorModified.addon.modules;
 
+import com.MeteorModified.addon.AddonTemplate;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Categories;
@@ -20,7 +21,7 @@ public class AutomaticXP extends Module {
     private final Setting<Integer> slot = sgGeneral.add(new IntSetting.Builder().name("hotbar-slot").defaultValue(1).min(1).max(9).build());
 
     public AutomaticXP() {
-        super(Categories.Combat, "automatic-exp", "Automatically uses Xp Bottles.");
+        super(AddonTemplate.CATEGORY, "automatic-exp", "Automatically uses Xp Bottles.");
     }
 
     @Override
